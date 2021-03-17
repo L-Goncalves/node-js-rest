@@ -4,8 +4,13 @@ const Atendimento = require('../models/atendimentos')
 module.exports = app => {
     // GET 
     app.get('/atendimentos', (req, res ) => {
-        
-        res.send('Servidor OK!')
+        Atendimento.lista(res);
+    })
+
+    app.get('/atendimentos/:id', (req, res) => {
+        let id = parseInt(req.params.id);
+
+        Atendimento.buscaPorId(id, res)
     })
 
     // POST
@@ -16,5 +21,12 @@ module.exports = app => {
         // PUSHES DATA INTO DATABASE
         Atendimento.adiciona(postReq, res)
       
+    })
+
+    app.patch('/atendimentos/:id', (req, res) => {
+        let id = parseInt(req.params.id);
+        const valores = req.body;
+
+        Atendimento.altera(id, valores, res);
     })
 }

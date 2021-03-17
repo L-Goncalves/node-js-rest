@@ -59,16 +59,52 @@ class Atendimento {
 
     }
 
-    lista(res){
+    lista(res) {
         const sql = 'SELECT * FROM Atendimentos'
 
-        conexao.query(sql, (erro) =>{ 
+        conexao.query(sql, (erro, resultados) => { 
             if(erro){
                 res.status(400).json(erro)
             }
-
+            
             else{
-                res.status(200).json()
+                res.status(200).json(resultados)
+            }
+                
+        })
+        
+    }
+
+    buscaPorId(id, res){
+        const sql = `SELECT * FROM Atendimentos WHERE id=${id}`
+
+        
+
+        conexao.query(sql, (erro, resultados) => {
+            if(erro){
+                res.status(400).json(erro)
+            }
+            else{
+                res.status(200).json(resultados)
+            }
+        })
+
+    }
+
+
+    altera(id, valores, res){
+        const sql = `UPDATE Atendimentos SET ? WHERE id=${id}`
+
+        if(valores.data){
+            valores.data =  moment(valores.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss')
+        }
+
+        conexao.query(sql, [valores, id], (erro, resultados) => {
+            if(erro){
+                res.status(400).json(erro)
+            }
+            else{
+                res.status(200).json(resultados);
             }
         })
     }
